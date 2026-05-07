@@ -141,21 +141,21 @@ COLLECTIONS = [
         "kicker": "专题入口",
         "title": "36 个内容与运营提示词",
         "description": "新增的 36 个提示词已直接并入 AI内容目录，采用与仓库其他文件一致的命名方式，覆盖短视频文案、人设风格、平台运营、行业内容、直播转化、私域成交、AI绘画、数据复盘和爆款重构。",
-        "href": f"{REPO_URL}/blob/main/prompts/06-ai-content/README.md",
+        "href": "../prompts/06-ai-content/README.md",
         "meta": "36 个",
     },
     {
         "kicker": "English",
         "title": "English README and 36 Prompts",
         "description": "英文说明文档与 36 个英文内容运营提示词已放在独立目录中，英文入口只导航到英文提示词文件，便于海外读者直接复制使用。",
-        "href": f"{REPO_URL}/blob/main/README.en.md",
+        "href": "../README.en.md",
         "meta": "EN",
     },
     {
         "kicker": "AI营销",
         "title": "25 个 GEO 营销实战模板",
         "description": "从《AI营销：从SEO到GEO》提示词合集拆分，覆盖机会判断、原理分析、内容工程、信源建设、数据监测、增长诊断和合规风险。",
-        "href": f"{REPO_URL}/blob/main/prompts/08-ai-marketing/README.md",
+        "href": "../prompts/08-ai-marketing/README.md",
         "meta": "25 个",
     },
 ]
@@ -171,6 +171,7 @@ class Prompt:
     description: str
     rel_path: str
     github_url: str
+    local_url: str
     slug: str
 
 
@@ -220,6 +221,7 @@ def load_prompts() -> list[Prompt]:
                 description=extract_description(body),
                 rel_path=rel,
                 github_url=f"{REPO_URL}/blob/main/{rel}",
+                local_url=f"../{rel}",
                 slug=path.stem,
             )
         )
@@ -271,7 +273,7 @@ def build_prompt_card(prompt: Prompt, color: str) -> str:
         <h3>{escape(prompt.title)}</h3>
         <p>{escape(desc)}</p>
         <div class="prompt-card__tags">{tag_list(prompt.tags)}</div>
-        <a class="prompt-link" href="{escape(prompt.github_url)}" target="_blank" rel="noreferrer">查看 Prompt</a>
+        <a class="prompt-link" href="{escape(prompt.local_url)}">查看 Prompt</a>
       </article>
     """
 
@@ -295,7 +297,7 @@ def build_featured(prompts: list[Prompt]) -> str:
               <div class="featured-side">
                 <span>{escape(prompt.category)}</span>
                 <strong>{escape(prompt.version)}</strong>
-                <a class="button" href="{escape(prompt.github_url)}" target="_blank" rel="noreferrer">查看推荐 Prompt</a>
+                <a class="button" href="{escape(prompt.local_url)}">查看推荐 Prompt</a>
               </div>
             </article>
             """
@@ -322,7 +324,7 @@ def build_collections() -> str:
               </div>
               <div class="collection-action">
                 <strong>{escape(item["meta"])}</strong>
-                <a class="button secondary" href="{escape(item["href"])}" target="_blank" rel="noreferrer">进入合集</a>
+                <a class="button secondary" href="{escape(item["href"])}">进入合集</a>
               </div>
             </article>
             """
@@ -352,7 +354,7 @@ def build_sections(prompts: list[Prompt]) -> str:
                   <span class="section-kicker" style="--accent:{color}">{escape(category)}</span>
                   <h2>{escape(CATEGORY_DESCRIPTIONS[category])}</h2>
                 </div>
-                <a href="{REPO_URL}/tree/main/prompts" target="_blank" rel="noreferrer">完整目录</a>
+                <a href="../CATALOG.md">完整目录</a>
               </div>
               <div class="prompt-grid">
                 {''.join(cards)}
@@ -916,7 +918,7 @@ def build_html(prompts: list[Prompt]) -> str:
           <p>从当前开源库中抽取 9 类提示词结构，展示每类的用途、规模和代表样例。当前重点推荐「智能元提示词生成系统 V0.6」；新增的 36 个内容与运营提示词已直接并入 AI内容目录，AI营销目录也新增 25 个 GEO 实战模板，并同步提供英文说明文档和英文提示词入口。</p>
           <div class="hero-actions">
             <a class="button" href="#AI方法">查看类型</a>
-            <a class="button secondary" href="{REPO_URL}/blob/main/CATALOG.md" target="_blank" rel="noreferrer">完整目录</a>
+            <a class="button secondary" href="../CATALOG.md">完整目录</a>
           </div>
         </div>
         <aside class="visual-panel" aria-label="提示词库统计">
