@@ -5,7 +5,7 @@ from collections import defaultdict
 ROOT = Path(__file__).resolve().parents[1]
 PROMPTS = ROOT / 'prompts'
 CATALOG = ROOT / 'CATALOG.md'
-VIEWER = 'viewer.html#/'
+VIEWER = 'viewer#/'
 
 CATEGORY_DESCRIPTIONS = {
     'AI方法': '元提示词、反编译、网页逆向和提示词工程方法。',
