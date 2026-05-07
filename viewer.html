@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yao Open Prompts Viewer</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .sidebar, .app-nav { display: none !important; }
+    .content { left: 0 !important; }
+  </style>
+</head>
+<body>
+  <div id="app">加载中...</div>
+  <script>
+    const target = decodeURIComponent((location.hash || "").replace(/^#\/?/, ""));
+    const homepage = target && target.endsWith(".md") ? target : "README.md";
+    window.$docsify = {
+      name: "Yao Open Prompts",
+      loadSidebar: false,
+      homepage,
+      relativePath: true,
+      subMaxLevel: 2,
+      auto2top: true
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+</body>
+</html>

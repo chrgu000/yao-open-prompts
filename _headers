@@ -18,5 +18,14 @@
 /prompts/*
   Content-Type: text/markdown; charset=utf-8
 
+/prompts/*/*
+  Content-Type: text/markdown; charset=utf-8
+
+/prompts/*/*/*
+  Content-Type: text/markdown; charset=utf-8
+
 /prompts-en/*
+  Content-Type: text/markdown; charset=utf-8
+
+/prompts-en/*/*
   Content-Type: text/markdown; charset=utf-8

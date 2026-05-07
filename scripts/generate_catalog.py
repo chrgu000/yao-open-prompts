@@ -5,6 +5,7 @@ from collections import defaultdict
 ROOT = Path(__file__).resolve().parents[1]
 PROMPTS = ROOT / 'prompts'
 CATALOG = ROOT / 'CATALOG.md'
+VIEWER = 'viewer.html#/'
 
 CATEGORY_DESCRIPTIONS = {
     'AI方法': '元提示词、反编译、网页逆向和提示词工程方法。',
@@ -61,7 +62,7 @@ def main():
     for rel, fm in entries:
         item_rows.append(
             f'| {fm.get("category", "")} | {fm.get("subcategory", "")} | '
-            f'[{fm.get("title", Path(rel).stem)}]({rel}) | {fm.get("status", "")} | '
+            f'[{fm.get("title", Path(rel).stem)}]({VIEWER}{rel}) | {fm.get("status", "")} | '
             f'{fm.get("tags", "").split(",")[0].strip()} |'
         )
 
