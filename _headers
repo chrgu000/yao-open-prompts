@@ -1,0 +1,22 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/CATALOG.md
+  Content-Type: text/markdown; charset=utf-8
+
+/CHANGELOG.md
+  Content-Type: text/markdown; charset=utf-8
+
+/README.md
+  Content-Type: text/markdown; charset=utf-8
+
+/README.en.md
+  Content-Type: text/markdown; charset=utf-8
+
+/prompts/*
+  Content-Type: text/markdown; charset=utf-8
+
+/prompts-en/*
+  Content-Type: text/markdown; charset=utf-8
