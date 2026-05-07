@@ -4,28 +4,155 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Yao Open Prompts Viewer</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
-    .sidebar, .app-nav { display: none !important; }
-    .content { left: 0 !important; }
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --ink: #171717;
+      --muted: #666b74;
+      --line: #deded7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    }
+    .shell {
+      width: min(980px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .top a {
+      color: #1d4ed8;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .status {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+    }
+    .panel pre {
+      overflow-x: auto;
+      background: #f5f5f0;
+      border-radius: 6px;
+      padding: 12px;
+    }
+    .panel code {
+      background: #f5f5f0;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .error {
+      color: #b91c1c;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
-  <div id="app">加载中...</div>
+  <main class="shell">
+    <div class="top">
+      <strong>Yao Open Prompts Viewer</strong>
+      <a href="/docs/">返回导航页</a>
+    </div>
+    <div class="status" id="status">加载中...</div>
+    <article class="panel markdown-body" id="content"></article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-    const target = decodeURIComponent((location.hash || "").replace(/^#\/?/, ""));
-    const homepage = target && target.endsWith(".md")
-      ? `/${target.replace(/^\/+/, "")}`
-      : "/README.md";
-    window.$docsify = {
-      name: "Yao Open Prompts",
-      loadSidebar: false,
-      homepage,
-      relativePath: false,
-      subMaxLevel: 2,
-      auto2top: true
-    };
+    const ROOT_FALLBACK = "/README.md";
+    const contentEl = document.getElementById("content");
+    const statusEl = document.getElementById("status");
+
+    const slugSearchBases = [
+      "/prompts/01-ai-methods/",
+      "/prompts/02-ai-work/",
+      "/prompts/03-ai-learning/",
+      "/prompts/03-ai-learning/learning-methods/",
+      "/prompts/04-ai-life/",
+      "/prompts/05-ai-education/",
+      "/prompts/05-ai-education/children-games/",
+      "/prompts/06-ai-content/",
+      "/prompts/06-ai-content/humanized-writing/",
+      "/prompts/07-ai-coding/",
+      "/prompts/08-ai-marketing/",
+      "/prompts/09-ai-thinking/",
+      "/prompts-en/06-ai-content/"
+    ];
+
+    function normalizeHash() {
+      return decodeURIComponent((location.hash || "").replace(/^#\/?/, "").trim());
+    }
+
+    function stripFrontmatter(md) {
+      return md.replace(/^---\n[\s\S]*?\n---\n?/, "");
+    }
+
+    async function tryFetch(path) {
+      const res = await fetch(path);
+      if (!res.ok) return null;
+      return await res.text();
+    }
+
+    async function resolveAndLoad(target) {
+      if (!target) {
+        return { path: ROOT_FALLBACK, markdown: await tryFetch(ROOT_FALLBACK) };
+      }
+      if (target.endsWith(".md")) {
+        const path = "/" + target.replace(/^\/+/, "");
+        return { path, markdown: await tryFetch(path) };
+      }
+
+      const slug = target.replace(/^\/+/, "").replace(/\.md$/, "");
+      for (const base of slugSearchBases) {
+        const candidate = `${base}${slug}.md`;
+        const markdown = await tryFetch(candidate);
+        if (markdown) return { path: candidate, markdown };
+      }
+      return { path: null, markdown: null };
+    }
+
+    async function render() {
+      const target = normalizeHash();
+      statusEl.textContent = "加载中...";
+      contentEl.innerHTML = "";
+
+      try {
+        const { path, markdown } = await resolveAndLoad(target);
+        if (!path || !markdown) {
+          statusEl.textContent = "未找到对应提示词";
+          contentEl.innerHTML = `<div class="error">未找到内容：${target || "(empty)"}\n\n请使用完整路径（例如 #/prompts/01-ai-methods/rtf-meta-prompt-system-v06.md）或有效 slug（例如 #/life-advice-blogger）。</div>`;
+          return;
+        }
+
+        statusEl.textContent = `已加载：${path}`;
+        const cleaned = stripFrontmatter(markdown);
+        contentEl.innerHTML = marked.parse(cleaned);
+      } catch (err) {
+        statusEl.textContent = "加载失败";
+        contentEl.innerHTML = `<div class="error">加载异常：${String(err)}</div>`;
+      }
+    }
+
+    window.addEventListener("hashchange", render);
+    render();
   </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
 </body>
 </html>
