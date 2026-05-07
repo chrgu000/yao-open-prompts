@@ -14,12 +14,14 @@
   <div id="app">加载中...</div>
   <script>
     const target = decodeURIComponent((location.hash || "").replace(/^#\/?/, ""));
-    const homepage = target && target.endsWith(".md") ? target : "README.md";
+    const homepage = target && target.endsWith(".md")
+      ? `/${target.replace(/^\/+/, "")}`
+      : "/README.md";
     window.$docsify = {
       name: "Yao Open Prompts",
       loadSidebar: false,
       homepage,
-      relativePath: true,
+      relativePath: false,
       subMaxLevel: 2,
       auto2top: true
     };
