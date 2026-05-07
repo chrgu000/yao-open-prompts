@@ -15,6 +15,12 @@
 /README.en.md
   Content-Type: text/markdown; charset=utf-8
 
+/viewer
+  Content-Type: text/html; charset=utf-8
+
+/viewer.html
+  Content-Type: text/html; charset=utf-8
+
 /prompts/*
   Content-Type: text/markdown; charset=utf-8
 
