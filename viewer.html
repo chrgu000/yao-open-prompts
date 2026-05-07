@@ -105,6 +105,36 @@
       return md.replace(/^---\n[\s\S]*?\n---\n?/, "");
     }
 
+    function resolveMarkdownHref(href, currentPath) {
+      if (!href || /^https?:\/\//i.test(href) || href.startsWith("#") || href.startsWith("mailto:")) {
+        return null;
+      }
+      const [rawPath, rawHash] = href.split("#");
+      if (!rawPath || !rawPath.endsWith(".md")) return null;
+
+      let resolvedPath = "";
+      if (rawPath.startsWith("/")) {
+        resolvedPath = rawPath;
+      } else {
+        const baseDir = currentPath.replace(/\/[^/]*$/, "/");
+        resolvedPath = new URL(rawPath, `https://local${baseDir}`).pathname;
+      }
+
+      const clean = resolvedPath.replace(/^\/+/, "");
+      const hashPart = rawHash ? `#${rawHash}` : "";
+      return `/viewer.html#/${clean}${hashPart}`;
+    }
+
+    function rewriteMarkdownLinks(container, currentPath) {
+      const links = container.querySelectorAll("a[href]");
+      links.forEach((link) => {
+        const nextHref = resolveMarkdownHref(link.getAttribute("href"), currentPath);
+        if (nextHref) {
+          link.setAttribute("href", nextHref);
+        }
+      });
+    }
+
     async function tryFetch(path) {
       const res = await fetch(path);
       if (!res.ok) return null;
@@ -145,6 +175,7 @@
         statusEl.textContent = `已加载：${path}`;
         const cleaned = stripFrontmatter(markdown);
         contentEl.innerHTML = marked.parse(cleaned);
+        rewriteMarkdownLinks(contentEl, path);
       } catch (err) {
         statusEl.textContent = "加载失败";
         contentEl.innerHTML = `<div class="error">加载异常：${String(err)}</div>`;
