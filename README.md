@@ -2,6 +2,10 @@
 
 [网页导航](https://yaojingang.github.io/yao-open-prompts/) · [完整目录](CATALOG.md) · [English README](README.en.md) · [英文提示词](prompts-en/06-ai-content/README.md) · [GitHub 仓库](https://github.com/yaojingang/yao-open-prompts)
 
+## 扩展目录
+
+- **[GPT Image 2 Skill](gpt_image_2_skill/index.html)**：独立目录，包含 `README.zh.md`、`README.md`、`skills/gpt-image/` 与参考资料；静态部署后可直接访问并通过 `viewer.html` 渲染其中 Markdown 文件。
+
 《姚金刚提示词合集》的开源版本，一个面向真实工作、学习、内容、营销和生活场景的中文 AI 提示词库。
 
 本仓库从原始合集文档和后续提示词目录中整理出 **116** 个中文提示词文件，并按场景重新分类。每个提示词保留可复制的正文，去除了原文中不适合放入开源仓库主体的教程推广、效果截图、视频附件说明和 HTML 样式残留。
